@@ -1,8 +1,7 @@
 package Main;
 
-import Main.Backend.Cell;
+import Main.Backend.Particle;
 import Main.Backend.CellMap;
-import Test.PositionTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +12,17 @@ public class Main {
         float actionRadius = 100, mapSideSize = 1000;
         int N = 1000;
 
-        ArrayList<Cell> cells = new ArrayList<>(N);
+        ArrayList<Particle> particles = new ArrayList<>(N);
 
         for(int i=0; i<N ; i++){
-            cells.add(new Cell((float)Math.random()*mapSideSize, (float)Math.random()*mapSideSize));
+            particles.add(new Particle((float)Math.random()*mapSideSize, (float)Math.random()*mapSideSize));
         }
 
-        CellMap cellMap = new CellMap(cells, actionRadius, mapSideSize);
+        CellMap cellMap = new CellMap(particles, actionRadius, mapSideSize);
 
-        List<Cell> neighbours = cellMap.getNeighboursOf(cells.get((N/2)));
+        cellMap.calculateAllNeighbours();
+
+        List<Particle> neighbours = cellMap.getNeighboursOf(particles.get((N/2)));
 
         System.out.println(neighbours);
     }

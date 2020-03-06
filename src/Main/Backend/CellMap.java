@@ -5,48 +5,46 @@ import java.util.List;
 import java.util.RandomAccess;
 
 public class CellMap{
-    private List<Cell> cells;
+    private List<Particle> particles;
     private boolean[][] neighboursMatrix;
 
     private float actionRadius, cellSideSize, mapSideSize;
 
-
-    public <T extends List<Cell> & RandomAccess> CellMap(T cells, float actionRadius, float mapSideSize){
+    public <T extends List<Particle> & RandomAccess> CellMap(T cells, float actionRadius, float mapSideSize){
         this(cells, actionRadius, actionRadius, mapSideSize);
     }
 
-    public <T extends List<Cell> & RandomAccess> CellMap(T cells, float actionRadius, float cellSideSize, float mapSideSize){
+    public <T extends List<Particle> & RandomAccess> CellMap(T cells, float actionRadius, float cellSideSize, float mapSideSize){
         this.actionRadius = actionRadius;
         this.cellSideSize = cellSideSize;
         this.mapSideSize = mapSideSize;
 
         int cellCount = cells.size();
 
-        this.cells = cells;
+        this.particles = cells;
         this.neighboursMatrix = new boolean[cellCount][cellCount];
-
-        calculateIndexes(cells);
-        calculateAllNeighbours();
     }
 
-    private void calculateIndexes(List<Cell> cells){
-        for(Cell cell : cells){
-            Position cellPos = cell.GetPos();
+    private void calculateIndexes(){
+        for(Particle particle : this.particles){
+            Position cellPos = particle.GetPos();
             int xIndex = (int)(cellPos.getX() / cellSideSize);
             int yIndex = (int)(cellPos.getY() / cellSideSize);
-            cell.setIndex(xIndex, yIndex);
+            particle.setIndex(xIndex, yIndex);
         }
     }
 
-    private void calculateAllNeighbours(){
-        for(int cellIndex1=0; cellIndex1 < cells.size(); cellIndex1++){
-            for(int cellIndex2=cellIndex1+1; cellIndex2 < cells.size(); cellIndex2++){
-                Cell cell1 = cells.get(cellIndex1), cell2 = cells.get(cellIndex2);
-                Index index1 = cell1.getIndex(), index2 = cell2.getIndex();
+    //Particle index method
+    public void calculateAllNeighbours(){
+        calculateIndexes();
+        for(int cellIndex1 = 0; cellIndex1 < particles.size(); cellIndex1++){
+            for(int cellIndex2 = cellIndex1+1; cellIndex2 < particles.size(); cellIndex2++){
+                Particle particle1 = particles.get(cellIndex1), particle2 = particles.get(cellIndex2);
+                Index index1 = particle1.getIndex(), index2 = particle2.getIndex();
 
                 boolean flag = false;
                 if(Math.abs(index1.getX() - index2.getX()) <= 1 && Math.abs(index1.getY() - index2.getY()) <= 1){
-                    if(cell1.IsInsideActionRadiusOf(cell2, this.actionRadius)){
+                    if(particle1.IsInsideActionRadiusOf(particle2, this.actionRadius)){
                         flag = true;
                     }
                 }
@@ -57,8 +55,22 @@ public class CellMap{
         }
     }
 
-    public boolean areNeighbours(Cell cell1, Cell cell2){
-        int cellIndex1 = cells.indexOf(cell1), cellIndex2 = cells.indexOf(cell2);
+    //Brute force method
+    public void calculateAllNeighboursBruteForce(){
+        for(int i = 0; i < this.particles.size()-1 ; i++){
+            for(int j = i+1; j < this.particles.size() ; j++){
+                Particle particle1 = particles.get(i), particle2 = particles.get(j);
+                if(particle1.IsInsideActionRadiusOf(particle2, this.actionRadius)){
+                    this.neighboursMatrix[i][j] = true;
+                }else{
+                    this.neighboursMatrix[i][j] = false;
+                }
+            }
+        }
+    }
+
+    public boolean areNeighbours(Particle particle1, Particle particle2){
+        int cellIndex1 = particles.indexOf(particle1), cellIndex2 = particles.indexOf(particle2);
 
         int max, min;
         if(cellIndex1 > cellIndex2){
@@ -72,14 +84,14 @@ public class CellMap{
         return neighboursMatrix[min][max];
     }
 
-    public List<Cell> getNeighboursOf(Cell cell){
-        int cellIndex = cells.indexOf(cell);
+    public List<Particle> getNeighboursOf(Particle particle){
+        int cellIndex = particles.indexOf(particle);
 
-        List<Cell> neighbours = new LinkedList<>();
+        List<Particle> neighbours = new LinkedList<>();
 
-        for(int i=cellIndex+1; i<cells.size(); i++){
+        for(int i = cellIndex+1; i< particles.size(); i++){
             if(neighboursMatrix[cellIndex][i]){
-                neighbours.add(cells.get(i));
+                neighbours.add(particles.get(i));
             }
         }
 

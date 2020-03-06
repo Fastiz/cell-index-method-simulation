@@ -1,20 +1,20 @@
 package Main.Backend;
 
-public class Cell {
+public class Particle {
     private Position pos;
     private Index index;
 
-    public Cell(Position pos){
+    public Particle(Position pos){
         this.pos = pos;
     }
 
-    public Cell(float x, float y){
+    public Particle(float x, float y){
         this.pos = new Position(x, y);
     }
 
-    public boolean IsInsideActionRadiusOf(Cell otherCell, float actionRadius){
+    public boolean IsInsideActionRadiusOf(Particle otherParticle, float actionRadius){
         float squaredActionRadius = (float)Math.pow(actionRadius, 2);
-        return squaredActionRadius >= otherCell.pos.SquaredDistanceFrom(pos);
+        return squaredActionRadius >= otherParticle.pos.SquaredDistanceFrom(pos);
     }
 
     public Position GetPos(){
