@@ -4,6 +4,12 @@ public class Particle {
     private Position pos;
     private Index index;
     private float radius;
+    private float radius;
+
+    public Particle(){
+
+    public Particle(Position pos, float radius){
+    }
 
     public Particle(Position pos, float radius){
         this.pos = pos;
@@ -34,5 +40,13 @@ public class Particle {
 
     public float getRadius() {
         return radius;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
+    }
+
+    public void setPosition(float x, float y){
+        this.pos = new Position(x, y);
     }
 }
