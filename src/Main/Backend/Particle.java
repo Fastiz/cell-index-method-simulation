@@ -3,6 +3,7 @@ package Main.Backend;
 public class Particle {
     private Position pos;
     private Index index;
+    private float radius;
 
     public Particle(Position pos){
         this.pos = pos;

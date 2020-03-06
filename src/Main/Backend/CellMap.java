@@ -9,14 +9,16 @@ public class CellMap{
     private boolean[][] neighboursMatrix;
 
     private float actionRadius, cellSideSize, mapSideSize;
+    private boolean withBorders;
 
-    public <T extends List<Particle> & RandomAccess> CellMap(T cells, float actionRadius, float mapSideSize){
-        this(cells, actionRadius, actionRadius, mapSideSize);
+    public <T extends List<Particle> & RandomAccess> CellMap(T cells, float actionRadius, float mapSideSize, boolean withBorders){
+        this(cells, actionRadius, actionRadius, mapSideSize, withBorders);
     }
 
-    public <T extends List<Particle> & RandomAccess> CellMap(T cells, float actionRadius, float cellSideSize, float mapSideSize){
+    public <T extends List<Particle> & RandomAccess> CellMap(T cells, float actionRadius, float cellSideSize, float mapSideSize, boolean withBorders){
+        this.withBorders = withBorders;
         this.actionRadius = actionRadius;
-        this.cellSideSize = cellSideSize;
+        this.cellSideSize = Math.max(cellSideSize, actionRadius);
         this.mapSideSize = mapSideSize;
 
         int cellCount = cells.size();
@@ -34,6 +36,22 @@ public class CellMap{
         }
     }
 
+    //Are neighbours
+    private boolean areCellNeighbours(Index index1, Index index2) {
+        int numberOfCells = (int)(this.mapSideSize / this.cellSideSize);
+        if(Math.abs(index1.getX() - index2.getX()) <= 1 && Math.abs(index1.getY() - index2.getY()) <= 1)
+            return true;
+
+        if(this.withBorders) {
+            if (Math.abs(index1.getX() - index2.getX()) + 1 == numberOfCells && index1.getY() == index2.getY())
+                return true;
+            if(Math.abs(index1.getY() - index2.getY()) + 1 == numberOfCells && index1.getX() == index2.getX())
+                return true;
+        }
+
+        return false;
+    }
+
     //Particle index method
     public void calculateAllNeighbours(){
         calculateIndexes();
@@ -43,7 +61,7 @@ public class CellMap{
                 Index index1 = particle1.getIndex(), index2 = particle2.getIndex();
 
                 boolean flag = false;
-                if(Math.abs(index1.getX() - index2.getX()) <= 1 && Math.abs(index1.getY() - index2.getY()) <= 1){
+                if(areCellNeighbours(index1, index2)){
                     if(particle1.IsInsideActionRadiusOf(particle2, this.actionRadius)){
                         flag = true;
                     }
