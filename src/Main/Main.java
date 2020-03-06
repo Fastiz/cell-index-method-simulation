@@ -17,7 +17,7 @@ public class Main {
         ArrayList<Particle> particles = new ArrayList<>(N);
 
         for(int i=0; i<N ; i++){
-            particles.add(new Particle((float)Math.random()*mapSideSize, (float)Math.random()*mapSideSize));
+            particles.add(new Particle((float)Math.random()*mapSideSize, (float)Math.random()*mapSideSize, 5));
         }
 
         CellMap cellMap = new CellMap(particles, actionRadius, mapSideSize, withBorders);
