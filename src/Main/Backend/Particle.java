@@ -4,11 +4,9 @@ public class Particle {
     private Position pos;
     private Index index;
     private float radius;
-    private float radius;
 
-    public Particle(){
+    public Particle() {
 
-    public Particle(Position pos, float radius){
     }
 
     public Particle(Position pos, float radius){
