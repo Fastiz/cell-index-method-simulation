@@ -111,6 +111,12 @@ public class CellMap{
             }
         }
 
+        for(int i = 0; i< cellIndex; i++){
+            if(neighboursMatrix[i][cellIndex]){
+                neighbours.add(particles.get(i));
+            }
+        }
+
         return neighbours;
     }
 }

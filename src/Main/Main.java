@@ -2,30 +2,26 @@ package Main;
 
 import Main.Backend.Particle;
 import Main.Backend.CellMap;
+import Main.Frontend.ReadFromFile;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args){
 
+        float actionRadius = (float)Math.sqrt(2)*1000;
 
-        boolean withBorders = true;
-        float actionRadius = 100, mapSideSize = 1000;
-        int N = 1000;
+        ReadFromFile readFromFile = new ReadFromFile("/home/fastiz/Desktop/staticFile",
+                "/home/fastiz/Desktop/dynamicFile");
 
-        ArrayList<Particle> particles = new ArrayList<>(N);
+        ArrayList<Particle> particles = readFromFile.getParticles();
 
-        for(int i=0; i<N ; i++){
-            particles.add(new Particle((float)Math.random()*mapSideSize, (float)Math.random()*mapSideSize, 5));
-        }
-
-        CellMap cellMap = new CellMap(particles, actionRadius, mapSideSize, withBorders);
+        CellMap cellMap = new CellMap(particles, actionRadius, readFromFile.getMapSizeSize(), false);
 
         cellMap.calculateAllNeighbours();
 
-        List<Particle> neighbours = cellMap.getNeighboursOf(particles.get((N/2)));
-
-        System.out.println(neighbours);
+        for(int i=0; i < particles.size(); i++){
+            System.out.println(cellMap.getNeighboursOf(particles.get(i)));
+        }
     }
 }

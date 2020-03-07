@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ReadFromFile {
 
-    private List<Particle> particles;
+    private ArrayList<Particle> particles;
 
     private float mapSizeSize;
 
@@ -77,7 +77,7 @@ public class ReadFromFile {
         return mapSizeSize;
     }
 
-    public List<Particle> getParticles() {
+    public ArrayList<Particle> getParticles() {
         return particles;
     }
 }
