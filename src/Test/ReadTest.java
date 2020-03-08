@@ -2,10 +2,20 @@ package Test;
 
 import Main.Frontend.ReadFromFile;
 
+import java.io.IOException;
+
 public class ReadTest {
     public void run(){
-        ReadFromFile readFromFile = new ReadFromFile("/home/fastiz/Desktop/staticFile",
-                "/home/fastiz/Desktop/dynamicFile");
+
+        ReadFromFile readFromFile;
+        try{
+            readFromFile = new ReadFromFile("/home/fastiz/Desktop/staticFile",
+                    "/home/fastiz/Desktop/dynamicFile");
+        }catch (IOException e){
+            System.err.println(e);
+            return;
+        }
+
 
         assert readFromFile.getMapSizeSize() == 1000;
 

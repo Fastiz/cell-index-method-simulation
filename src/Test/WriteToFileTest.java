@@ -1,16 +1,16 @@
-package Main;
+package Test;
 
-import Main.Backend.Particle;
 import Main.Backend.CellMap;
+import Main.Backend.Particle;
 import Main.Frontend.ReadFromFile;
 import Main.Frontend.WriteToFile;
-import Test.WriteToFileTest;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Main {
-    public static void main(String[] args){
+public class WriteToFileTest {
+    public void run(){
         float actionRadius = (float)Math.sqrt(2)*1000;
 
         ReadFromFile readFromFile;
@@ -28,8 +28,17 @@ public class Main {
 
         cellMap.calculateAllNeighbours();
 
+        ArrayList<ArrayList<Particle>> particlesNeighbors = new ArrayList<>(particles.size());
+
         for(int i=0; i < particles.size(); i++){
-            System.out.println(cellMap.getNeighboursOf(particles.get(i)));
+            ArrayList<Particle> newNeighbors = new ArrayList<>(cellMap.getNeighboursOf(particles.get(i)));
+            particlesNeighbors.add(newNeighbors);
+        }
+
+        try{
+            WriteToFile writeToFile = new WriteToFile("neighbors", particlesNeighbors, particles);
+        }catch (IOException e){
+            System.err.println(e);
         }
     }
 }
