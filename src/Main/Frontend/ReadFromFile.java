@@ -3,7 +3,9 @@ package Main.Frontend;
 import Main.Backend.Particle;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,13 +15,13 @@ public class ReadFromFile {
 
     private float mapSizeSize;
 
-    public ReadFromFile(String staticFile, String dynamicFile){
+    public ReadFromFile(String staticFile, String dynamicFile) throws IOException{
         readStaticFile(staticFile);
 
         readDynamicFile(dynamicFile);
     }
 
-    private void readStaticFile(String file){
+    private void readStaticFile(String file) throws IOException {
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
@@ -36,8 +38,6 @@ public class ReadFromFile {
             while ((line = br.readLine()) != null) {
                 readParticleProperties(line);
             }
-        }catch (Exception e){
-            System.out.println(e);
         }
     }
 
@@ -51,7 +51,7 @@ public class ReadFromFile {
         this.particles.add(newParticle);
     }
 
-    private void readDynamicFile(String file){
+    private void readDynamicFile(String file) throws IOException{
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             //discard t0
             br.readLine();
@@ -60,8 +60,6 @@ public class ReadFromFile {
             for(int i=0; (line = br.readLine()) != null && i<this.particles.size(); i++){
                 readParticlePositionAndVelocity(line, i);
             }
-        }catch (Exception e){
-            System.out.println(e);
         }
     }
 

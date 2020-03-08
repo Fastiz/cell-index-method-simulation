@@ -4,6 +4,7 @@ import Main.Backend.Particle;
 import Main.Backend.CellMap;
 import Main.Frontend.ReadFromFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
@@ -11,8 +12,14 @@ public class Main {
 
         float actionRadius = (float)Math.sqrt(2)*1000;
 
-        ReadFromFile readFromFile = new ReadFromFile("/home/fastiz/Desktop/staticFile",
-                "/home/fastiz/Desktop/dynamicFile");
+        ReadFromFile readFromFile;
+        try{
+            readFromFile = new ReadFromFile("/home/fastiz/Desktop/staticFile",
+                    "/home/fastiz/Desktop/dynamicFile");
+        }catch (IOException e){
+            System.err.println(e);
+            return;
+        }
 
         ArrayList<Particle> particles = readFromFile.getParticles();
 
