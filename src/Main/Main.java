@@ -15,7 +15,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        CellIndexMethodProject cellIndexMethodProject = new CellIndexMethodProject(500, 1000, 5, 8, 300, true, 0);
+        CellIndexMethodProject cellIndexMethodProject = new CellIndexMethodProject(5000, 1000, 5, 8, 150, true, 3);
 
     }
 }

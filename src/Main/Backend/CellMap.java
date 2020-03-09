@@ -26,7 +26,8 @@ public class CellMap {
         if(mapSideSize / cellLength >= (2 * maxRadius) + actionRadius){
             this.cellSideSize = mapSideSize/cellLength;
         }else{
-            float minCellSide = mapSideSize;
+            System.err.println("No cumple con la condicion.");
+           /* float minCellSide = mapSideSize;
             for(int M=0;;M++){
                 if(mapSideSize / M >= (2 * maxRadius) + actionRadius){
                     minCellSide = mapSideSize / M;
@@ -34,7 +35,7 @@ public class CellMap {
                     break;
                 }
             }
-            this.cellSideSize = minCellSide;
+            this.cellSideSize = minCellSide;*/
         }
 
         this.maxIndex = (int) Math.ceil(mapSideSize / this.cellSideSize);
@@ -77,32 +78,49 @@ public class CellMap {
             Position pos1 = p1.getPos(), pos2 = p2.getPos();
 
             Position virtualPos = new Position(pos2.getX(), pos2.getY());
-            
+
+            float dx = Math.abs(pos2.getX() - pos1.getX());
+            if(dx > mapSideSize/2) {
+                if(pos2.getX() > pos1.getX())
+                    virtualPos.setX(pos2.getX() - mapSideSize);
+                else
+                    virtualPos.setX(pos2.getX() + mapSideSize);
+            }
+
+            float dy = Math.abs(pos2.getY() - pos1.getY());
+            if(dy > mapSideSize/2) {
+                if(pos2.getY() > pos1.getY())
+                    virtualPos.setY(pos2.getY() - mapSideSize);
+                else
+                    virtualPos.setY(pos2.getY() + mapSideSize);
+            }
+
+
             //check if should move x position
-            if(pos2.getX() > this.mapSideSize - pos2.getX()){
-                if(Math.abs(pos2.getX() - this.mapSideSize + pos1.getX()) < Math.abs(pos2.getX() - pos1.getX())){
-                    //then we would get closer by sustracting mapSideSize
-                    virtualPos.setX(pos2.getX()-this.mapSideSize);
-                }
-            }else{
-                if(Math.abs(pos2.getX() + this.mapSideSize - pos1.getX()) < Math.abs(pos2.getX() - pos1.getX())){
-                    //then we would get closer by adding mapSideSize
-                    virtualPos.setX(pos2.getX()+this.mapSideSize);
-                }
-            }
-            
-            //check if should move y position
-            if(pos2.getY() > this.mapSideSize - pos2.getY()){
-                if(Math.abs(pos2.getY() - this.mapSideSize + pos1.getY()) < Math.abs(pos2.getY() - pos1.getY())){
-                    //then we would get closer by sustracting mapSideSize
-                    virtualPos.setY(pos2.getY()-this.mapSideSize);
-                }
-            }else{
-                if(Math.abs(pos2.getY() + this.mapSideSize - pos1.getY()) < Math.abs(pos2.getY() - pos1.getY())){
-                    //then we would get closer by adding mapSideSize
-                    virtualPos.setY(pos2.getY()+this.mapSideSize);
-                }
-            }
+//            if(pos2.getX() > this.mapSideSize - pos2.getX()){
+//                if(Math.abs(pos2.getX() - this.mapSideSize + pos1.getX()) < Math.abs(pos2.getX() - pos1.getX())){
+//                    //then we would get closer by sustracting mapSideSize
+//                    virtualPos.setX(pos2.getX()-this.mapSideSize);
+//                }
+//            }else{
+//                if(Math.abs(pos2.getX() + this.mapSideSize - pos1.getX()) < Math.abs(pos2.getX() - pos1.getX())){
+//                    //then we would get closer by adding mapSideSize
+//                    virtualPos.setX(pos2.getX()+this.mapSideSize);
+//                }
+//            }
+//
+//            //check if should move y position
+//            if(pos2.getY() > this.mapSideSize - pos2.getY()){
+//                if(Math.abs(pos2.getY() - this.mapSideSize + pos1.getY()) < Math.abs(pos2.getY() - pos1.getY())){
+//                    //then we would get closer by sustracting mapSideSize
+//                    virtualPos.setY(pos2.getY()-this.mapSideSize);
+//                }
+//            }else{
+//                if(Math.abs(pos2.getY() + this.mapSideSize - pos1.getY()) < Math.abs(pos2.getY() - pos1.getY())){
+//                    //then we would get closer by adding mapSideSize
+//                    virtualPos.setY(pos2.getY()+this.mapSideSize);
+//                }
+//            }
 
             Particle virtualParticle = new Particle(virtualPos, p2.getRadius());
 
