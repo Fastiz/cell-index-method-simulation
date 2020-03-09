@@ -4,6 +4,7 @@ import Main.Backend.GenerateParticleMap;
 import Main.Backend.Particle;
 import Main.Backend.CellMap;
 import Main.Frontend.ReadFromFile;
+import Main.Frontend.WriteForOvito;
 import Main.Frontend.WriteToFile;
 import Test.WriteToFileTest;
 
@@ -54,7 +55,13 @@ public class Main {
         }
 
         try{
-            WriteToFile writeToFile = new WriteToFile("neighbors", neighbors, particles);
+            WriteToFile writeToFile = new WriteToFile("neighbors", neighbors);
+        }catch (IOException e){
+            System.err.println(e);
+        }
+
+        try{
+            WriteForOvito writeForOvito= new WriteForOvito("ovito", particles);
         }catch (IOException e){
             System.err.println(e);
         }

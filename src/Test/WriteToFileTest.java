@@ -36,7 +36,7 @@ public class WriteToFileTest {
         }
 
         try{
-            WriteToFile writeToFile = new WriteToFile("neighbors", particlesNeighbors, particles);
+            WriteToFile writeToFile = new WriteToFile("neighbors", particlesNeighbors);
         }catch (IOException e){
             System.err.println(e);
         }

@@ -18,7 +18,7 @@ public class GenerateParticleMap {
         this.particles = new ArrayList<>();
 
         for(int i=0; i<numberOfParticles; i++){
-            while(createParticleAndCheckForOverlap());
+            while(!createParticleAndCheckForOverlap());
         }
 
     }
