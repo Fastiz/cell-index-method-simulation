@@ -14,9 +14,9 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args){
-        float actionRadius = (float)150;
+        float actionRadius = (float)300;
 
-        GenerateParticleMap generateParticleMap = new GenerateParticleMap(1000, 200, 10, 15);
+        GenerateParticleMap generateParticleMap = new GenerateParticleMap(1000, 500, 5, 8);
 
         ArrayList<Particle> particles = generateParticleMap.getParticles();
 
@@ -29,15 +29,7 @@ public class Main {
         System.out.println(totalTime/10000);
 
         ArrayList<List<Particle>> neighbors = new ArrayList<>();
-        for(int i=0; i < particles.size(); i++){
-            neighbors.add(cellMap.getNeighboursOf(particles.get(i)));
-        }
 
-        try{
-            WriteToFile writeToFile = new WriteToFile("neighbors", neighbors);
-        }catch (IOException e){
-            System.err.println(e);
-        }
 
         startTime = System.nanoTime();
         cellMap.calculateAllNeighboursv2();
@@ -57,40 +49,6 @@ public class Main {
             System.err.println(e);
         }
 
-
-        startTime = System.nanoTime();
-        cellMap.calculateAllNeighboursOld();
-        endTime   = System.nanoTime();
-        totalTime = endTime - startTime;
-        System.out.println(totalTime/10000);
-
-        neighbors = new ArrayList<>();
-        for(int i=0; i < particles.size(); i++){
-            neighbors.add(cellMap.getNeighboursOf(particles.get(i)));
-        }
-
-        try{
-            WriteToFile writeToFile = new WriteToFile("neighborsOLD", neighbors);
-        }catch (IOException e){
-            System.err.println(e);
-        }
-
-        startTime = System.nanoTime();
-        cellMap.calculateAllNeighboursBruteForce();
-        endTime   = System.nanoTime();
-        totalTime = endTime - startTime;
-        System.out.println(totalTime/10000);
-
-        neighbors = new ArrayList<>();
-        for(int i=0; i < particles.size(); i++){
-            neighbors.add(cellMap.getNeighboursOf(particles.get(i)));
-        }
-
-        try{
-            WriteToFile writeToFile = new WriteToFile("neighbors", neighbors);
-        }catch (IOException e){
-            System.err.println(e);
-        }
 
         try{
             Particle selectedParticle = particles.get(0);

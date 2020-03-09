@@ -16,19 +16,13 @@ public class WriteForOvito {
             int R, G, B;
             for(Particle part : particles){
                 if(part.equals(selectedParticle)){
-                    R=235;
-                    G=229;
-                    B=52;
+                    R=255;
                 }else if(neighbors.contains(part)){
-                    R=235;
-                    G=76;
-                    B=52;
+                    R=150;
                 }else{
-                    R=52;
-                    G=79;
-                    B=235;
+                    R=0;
                 }
-                writer.println(part.getPos().getX() + " " + part.getPos().getY() + " " + part.getRadius() + " " + R +" "+" "+G+" "+B);
+                writer.println(part.getPos().getX() + " " + part.getPos().getY() + " " + part.getRadius() + " " + R);
             }
         }
     }
