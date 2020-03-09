@@ -15,14 +15,28 @@ public class CellMap {
     private int maxIndex;
 
     public <T extends List<Particle> & RandomAccess> CellMap(T cells, float actionRadius, float mapSideSize, boolean withBorders, float maxRadius) {
-        this(cells, actionRadius, actionRadius, mapSideSize, withBorders, maxRadius);
+        this(cells, actionRadius, (int)(mapSideSize / (actionRadius + 2*maxRadius)), mapSideSize, withBorders, maxRadius);
     }
 
-    public <T extends List<Particle> & RandomAccess> CellMap(T cells, float actionRadius, float cellSideSize, float mapSideSize, boolean withBorders, float maxRadius) {
+    public <T extends List<Particle> & RandomAccess> CellMap(T cells, float actionRadius, int cellLength, float mapSideSize, boolean withBorders, float maxRadius) {
         this.withBorders = withBorders;
         this.actionRadius = actionRadius;
-        this.cellSideSize = (2 * maxRadius) + actionRadius;
         this.mapSideSize = mapSideSize;
+
+        if(mapSideSize / cellLength >= (2 * maxRadius) + actionRadius){
+            this.cellSideSize = mapSideSize/cellLength;
+        }else{
+            float minCellSide = mapSideSize;
+            for(int M=0;;M++){
+                if(mapSideSize / M >= (2 * maxRadius) + actionRadius){
+                    minCellSide = mapSideSize / M;
+                }else{
+                    break;
+                }
+            }
+            this.cellSideSize = minCellSide;
+        }
+
         this.maxIndex = (int) Math.ceil(mapSideSize / this.cellSideSize);
 
         int cellCount = cells.size();
