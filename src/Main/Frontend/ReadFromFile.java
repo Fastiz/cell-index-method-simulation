@@ -13,7 +13,7 @@ public class ReadFromFile {
 
     private ArrayList<Particle> particles;
 
-    private float mapSizeSize;
+    private float mapSideSize;
 
     public ReadFromFile(String staticFile, String dynamicFile) throws IOException{
         readStaticFile(staticFile);
@@ -32,7 +32,7 @@ public class ReadFromFile {
             };
 
             if((line = br.readLine()) != null){
-                this.mapSizeSize = Integer.valueOf(line);
+                this.mapSideSize = Integer.valueOf(line);
             };
 
             while ((line = br.readLine()) != null) {
@@ -71,8 +71,8 @@ public class ReadFromFile {
         particle.setPosition(Float.valueOf(arr[0]), Float.valueOf(arr[1]));
     }
 
-    public float getMapSizeSize() {
-        return mapSizeSize;
+    public float getMapSideSize() {
+        return mapSideSize;
     }
 
     public ArrayList<Particle> getParticles() {

@@ -24,11 +24,11 @@ public class WriteToFileTest {
 
         ArrayList<Particle> particles = readFromFile.getParticles();
 
-        CellMap cellMap = new CellMap(particles, actionRadius, readFromFile.getMapSizeSize(), false);
+        CellMap cellMap = new CellMap(particles, actionRadius, readFromFile.getMapSideSize(), false);
 
         cellMap.calculateAllNeighbours();
 
-        ArrayList<ArrayList<Particle>> particlesNeighbors = new ArrayList<>(particles.size());
+        ArrayList<List<Particle>> particlesNeighbors = new ArrayList<>(particles.size());
 
         for(int i=0; i < particles.size(); i++){
             ArrayList<Particle> newNeighbors = new ArrayList<>(cellMap.getNeighboursOf(particles.get(i)));

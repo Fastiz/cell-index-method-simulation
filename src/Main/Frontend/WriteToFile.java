@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WriteToFile {
-    public WriteToFile(String file, ArrayList<ArrayList<Particle>> particlesNeighbors, List<Particle> particles) throws IOException {
+    public WriteToFile(String file, ArrayList<List<Particle>> particlesNeighbors, List<Particle> particles) throws IOException {
         try(PrintWriter writer = new PrintWriter(file)){
             StringBuilder line;
             for(int i = 0; i < particlesNeighbors.size() ; i++){

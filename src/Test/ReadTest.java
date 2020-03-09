@@ -17,7 +17,7 @@ public class ReadTest {
         }
 
 
-        assert readFromFile.getMapSizeSize() == 1000;
+        assert readFromFile.getMapSideSize() == 1000;
 
         //System.out.println(readFromFile.getParticles());
 
