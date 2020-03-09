@@ -4,6 +4,7 @@ public class Particle {
     private Position pos;
     private Index index;
     private float radius;
+    private int id;
 
     public Particle() {
 
@@ -26,6 +27,14 @@ public class Particle {
 
     public Position getPos(){
         return pos;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setIndex(int x, int y){

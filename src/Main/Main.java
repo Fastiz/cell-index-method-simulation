@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args){
-        float actionRadius = (float)Math.sqrt(2)*1000;
+        float actionRadius = (float)100.0;
 
         GenerateParticleMap generateParticleMap = new GenerateParticleMap(1000, 100, 6, 15);
 
@@ -27,11 +27,30 @@ public class Main {
 
         CellMap cellMap = new CellMap(particles, actionRadius, generateParticleMap.getMapSideSize(), false);
 
+        long startTime = System.nanoTime();
         cellMap.calculateAllNeighbours();
+        long endTime   = System.nanoTime();
+        long totalTime = endTime - startTime;
+        System.out.println(totalTime/10000);
+
+
+        startTime = System.nanoTime();
+        cellMap.calculateAllNeighboursv2();
+        endTime   = System.nanoTime();
+        totalTime = endTime - startTime;
+        System.out.println(totalTime/10000);
+
+
+        startTime = System.nanoTime();
+        cellMap.calculateAllNeighboursOld();
+        endTime   = System.nanoTime();
+        totalTime = endTime - startTime;
+        System.out.println(totalTime/10000);
 
         ArrayList<List<Particle>> neighbors = new ArrayList<>();
         for(int i=0; i < particles.size(); i++){
             neighbors.add(cellMap.getNeighboursOf(particles.get(i)));
+
         }
 
         try{
