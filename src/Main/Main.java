@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args){
-        float actionRadius = (float)Math.sqrt(2)*1000;
+        float actionRadius = (float)100.0;
 
         ReadFromFile readFromFile;
         try{
@@ -26,10 +26,28 @@ public class Main {
 
         CellMap cellMap = new CellMap(particles, actionRadius, readFromFile.getMapSizeSize(), false);
 
+        long startTime = System.nanoTime();
         cellMap.calculateAllNeighbours();
+        long endTime   = System.nanoTime();
+        long totalTime = endTime - startTime;
+        System.out.println(totalTime/10000);
+
+
+        startTime = System.nanoTime();
+        cellMap.calculateAllNeighboursv2();
+        endTime   = System.nanoTime();
+        totalTime = endTime - startTime;
+        System.out.println(totalTime/10000);
+
+
+        startTime = System.nanoTime();
+        cellMap.calculateAllNeighboursOld();
+        endTime   = System.nanoTime();
+        totalTime = endTime - startTime;
+        System.out.println(totalTime/10000);
 
         for(int i=0; i < particles.size(); i++){
-            System.out.println(cellMap.getNeighboursOf(particles.get(i)));
+            //System.out.println(cellMap.getNeighboursOf(particles.get(i)));
         }
     }
 }
