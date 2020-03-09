@@ -14,6 +14,7 @@ public class ReadFromFile {
     private ArrayList<Particle> particles;
 
     private float mapSideSize;
+    private float maxRadius = 0;
 
     public ReadFromFile(String staticFile, String dynamicFile) throws IOException{
         readStaticFile(staticFile);
@@ -32,7 +33,7 @@ public class ReadFromFile {
             };
 
             if((line = br.readLine()) != null){
-                this.mapSideSize = Integer.valueOf(line);
+                this.mapSideSize = Float.valueOf(line);
             };
 
             while ((line = br.readLine()) != null) {
@@ -46,7 +47,11 @@ public class ReadFromFile {
 
         Particle newParticle = new Particle();
 
-        newParticle.setRadius(Float.valueOf(arr[0]));
+        float radius = Float.valueOf(arr[0]);
+        if(radius > maxRadius)
+            maxRadius = radius;
+
+        newParticle.setRadius(radius);
 
         this.particles.add(newParticle);
     }
@@ -73,6 +78,10 @@ public class ReadFromFile {
 
     public float getMapSideSize() {
         return mapSideSize;
+    }
+
+    public float getMaxRadius() {
+        return maxRadius;
     }
 
     public ArrayList<Particle> getParticles() {

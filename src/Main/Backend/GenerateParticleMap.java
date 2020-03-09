@@ -74,4 +74,7 @@ public class GenerateParticleMap {
         }
     }
 
+    public float getMaxRadius() {
+        return maxRadius;
+    }
 }
