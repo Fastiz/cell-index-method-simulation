@@ -14,7 +14,7 @@ public class WriteToFile {
             for(int i = 0; i < particlesNeighbors.size() ; i++){
                 line = new StringBuilder("[" + i);
                 for(int j=0; j<particlesNeighbors.get(i).size(); j++){
-                    line.append(" ").append(j);
+                    line.append(" ").append(particlesNeighbors.get(i).get(j).getId());
                 }
                 line.append("]");
                 writer.println(line);

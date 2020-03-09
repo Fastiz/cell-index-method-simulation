@@ -54,28 +54,50 @@ public class CellMap {
         }
     }
 
-    //Are neighbours
-    private boolean checkIfNeighbourIsInsideRadius(Particle particle1, Particle particle2) {
-        Index index1 = particle1.getIndex(), index2 = particle2.getIndex();
-        int numberOfCells = (int) (this.mapSideSize / this.cellSideSize);
-
-        if (Math.abs(index1.getX() - index2.getX()) <= 1 && Math.abs(index1.getY() - index2.getY()) <= 1)
-            return particle1.IsInsideActionRadiusOf(particle2, this.actionRadius);
-
-        if (this.withBorders) {
-            if (Math.abs(index1.getX() - index2.getX()) + 1 == numberOfCells && index1.getY() == index2.getY()) {
-                if (particle1.getPos().getX() > particle2.getPos().getX())
-                    return particle2.IsInsideActionRadiusOf(new Particle(particle1.getPos().getX() - this.mapSideSize, particle1.getPos().getY(), particle1.getRadius()), this.actionRadius);
-                return particle1.IsInsideActionRadiusOf(new Particle(particle2.getPos().getX() - this.mapSideSize, particle2.getPos().getY(), particle2.getRadius()), this.actionRadius);
-            }
-            if (Math.abs(index1.getY() - index2.getY()) + 1 == numberOfCells && index1.getX() == index2.getX()) {
-                if (particle1.getPos().getY() > particle2.getPos().getY())
-                    return particle2.IsInsideActionRadiusOf(new Particle(particle1.getPos().getX(), particle1.getPos().getY() - this.mapSideSize, particle1.getRadius()), this.actionRadius);
-                return particle1.IsInsideActionRadiusOf(new Particle(particle2.getPos().getX(), particle2.getPos().getY() - this.mapSideSize, particle2.getRadius()), this.actionRadius);
-            }
+    private boolean checkIfNeighborIsInsideRadius(Particle p1, Particle p2){
+        if(p1.IsInsideActionRadiusOf(p2, this.actionRadius)){
+            return true;
         }
 
-        return false;
+        if(this.withBorders){
+            Position pos1 = p1.getPos(), pos2 = p2.getPos();
+
+            Position virtualPos = new Position(pos2.getX(), pos2.getY());
+            
+            //check if should move x position
+            if(pos2.getX() > this.mapSideSize - pos2.getX()){
+                if(Math.abs(pos2.getX() - this.mapSideSize + pos1.getX()) < Math.abs(pos2.getX() - pos1.getX())){
+                    //then we would get closer by sustracting mapSideSize
+                    virtualPos.setX(pos2.getX()-this.mapSideSize);
+                }
+            }else{
+                if(Math.abs(pos2.getX() + this.mapSideSize - pos1.getX()) < Math.abs(pos2.getX() - pos1.getX())){
+                    //then we would get closer by adding mapSideSize
+                    virtualPos.setX(pos2.getX()+this.mapSideSize);
+                }
+            }
+            
+            //check if should move y position
+            if(pos2.getY() > this.mapSideSize - pos2.getY()){
+                if(Math.abs(pos2.getY() - this.mapSideSize + pos1.getY()) < Math.abs(pos2.getY() - pos1.getY())){
+                    //then we would get closer by sustracting mapSideSize
+                    virtualPos.setY(pos2.getY()-this.mapSideSize);
+                }
+            }else{
+                if(Math.abs(pos2.getY() + this.mapSideSize - pos1.getY()) < Math.abs(pos2.getY() - pos1.getY())){
+                    //then we would get closer by adding mapSideSize
+                    virtualPos.setY(pos2.getY()+this.mapSideSize);
+                }
+            }
+
+            Particle virtualParticle = new Particle(virtualPos, p2.getRadius());
+
+            return p1.IsInsideActionRadiusOf(virtualParticle, this.actionRadius);
+        }else{
+
+            return false;
+        }
+
     }
 
     public void printNeighbours() {
@@ -86,18 +108,9 @@ public class CellMap {
         }
     }
 
-    //Particle index method
-    public void calculateAllNeighboursOld() {
-        calculateIndexes();
-        for (int particleIndex1 = 0; particleIndex1 < particles.size(); particleIndex1++) {
-            for (int particleIndex2 = particleIndex1 + 1; particleIndex2 < particles.size(); particleIndex2++) {
-                Particle particle1 = particles.get(particleIndex1), particle2 = particles.get(particleIndex2);
-                neighboursMatrix[particleIndex1][particleIndex2] = checkIfNeighbourIsInsideRadius(particle1, particle2);
-            }
-        }
-    }
-
     private int correctIndex(int index) {
+        if(!withBorders && (index < 0 || index >= maxIndex))
+            return -1;
         if (index < 0 && withBorders)
             return maxIndex - 1;
         if (index >= maxIndex && withBorders)
@@ -105,57 +118,37 @@ public class CellMap {
         return index;
     }
 
-    //Particle index method
-    public void calculateAllNeighbours() {
-        calculateIndexes();
-
-        for (Particle particle1 : particles) {
-            int xIndex = particle1.getIndex().getX();
-            int yIndex = particle1.getIndex().getY();
-            for (int x = xIndex - 1; x <= xIndex + 1; x++) {
-                int xToCalculate = correctIndex(x);
-                if (xToCalculate >= 0 && xToCalculate < maxIndex) {
-                    for (int y = yIndex - 1; y <= yIndex + 1; y++) {
-                        int yToCalculate = correctIndex(y);
-                        if (yToCalculate >= 0 && yToCalculate < maxIndex) {
-                            for (Particle particle2 : indexes[yToCalculate][xToCalculate].getParticles()) {
-                                neighboursMatrix[particle1.getId()][particle2.getId()] = checkIfNeighbourIsInsideRadius(particle1, particle2);
-                                neighboursMatrix[particle2.getId()][particle1.getId()] = neighboursMatrix[particle1.getId()][particle2.getId()];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    //Particle index method
-    public boolean[][] calculateAllNeighboursv2() {
+    public void calculateAllNeighbors(){
         calculateIndexes();
 
         for (int xIndex = 0; xIndex < maxIndex; xIndex++) {
             for (int yIndex = 0; yIndex < maxIndex; yIndex++) {
-                for (Particle particle1 : indexes[yIndex][xIndex].getParticles()) {
-                    for (int x = xIndex; x <= xIndex + 1; x++) {
-                        int xToCalculate = correctIndex(x);
-                        if (xToCalculate >= 0 && xToCalculate < maxIndex) {
-                            for (int y = yIndex - 1; y <= yIndex + 1; y++) {
-                                if (!(xIndex == 0 && yIndex == 1)) {
-                                    int yToCalculate = correctIndex(y);
-                                    if (yToCalculate >= 0 && yToCalculate < maxIndex) {
-                                        for (Particle particle2 : indexes[yToCalculate][xToCalculate].getParticles()) {
-                                            neighboursMatrix[particle1.getId()][particle2.getId()] = checkIfNeighbourIsInsideRadius(particle1, particle2);
-                                            neighboursMatrix[particle2.getId()][particle1.getId()] = neighboursMatrix[particle1.getId()][particle2.getId()];
-                                        }
-                                    }
-                                }
+                List<Particle> particlesInAdjacentCells = new ArrayList<>();
+
+                for(int adjacentIndexX = xIndex; adjacentIndexX <= xIndex + 1; adjacentIndexX++){
+                    for(int adjacentIndexY = yIndex-1; adjacentIndexY <= yIndex + 1; adjacentIndexY++){
+
+                        if(adjacentIndexX != xIndex || adjacentIndexY != yIndex-1){
+                            int x = correctIndex(adjacentIndexX);
+                            int y = correctIndex(adjacentIndexY);
+
+                            if(x >= 0 && y >= 0){
+                                particlesInAdjacentCells.addAll(indexes[y][x].getParticles());
                             }
+
                         }
+                    }
+                }
+
+                for(Particle particle1 : indexes[yIndex][xIndex].getParticles()){
+                    for(Particle particle2 : particlesInAdjacentCells){
+                        boolean result = checkIfNeighborIsInsideRadius(particle1, particle2);
+                        neighboursMatrix[particle1.getId()][particle2.getId()] = result;
+                        neighboursMatrix[particle2.getId()][particle1.getId()] = result;
                     }
                 }
             }
         }
-        return neighboursMatrix;
     }
 
     //Brute force method
@@ -163,7 +156,7 @@ public class CellMap {
         for (int i = 0; i < this.particles.size() - 1; i++) {
             for (int j = i + 1; j < this.particles.size(); j++) {
                 Particle particle1 = particles.get(i), particle2 = particles.get(j);
-                if (particle1.IsInsideActionRadiusOf(particle2, this.actionRadius)) {
+                if (checkIfNeighborIsInsideRadius(particle1, particle2)) {
                     this.neighboursMatrix[i][j] = true;
                 } else {
                     this.neighboursMatrix[i][j] = false;
