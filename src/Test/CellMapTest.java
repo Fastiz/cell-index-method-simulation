@@ -9,7 +9,7 @@ public class CellMapTest {
     public void run (){
         ArrayList<Particle> cells = new ArrayList<>();
 
-        CellMap cellMap = new CellMap(cells, 7, 20, false);
+        CellMap cellMap = new CellMap(cells, 7, 20, false, 2);
     }
 
 }

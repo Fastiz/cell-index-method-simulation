@@ -24,7 +24,7 @@ public class WriteToFileTest {
 
         ArrayList<Particle> particles = readFromFile.getParticles();
 
-        CellMap cellMap = new CellMap(particles, actionRadius, readFromFile.getMapSideSize(), false);
+        CellMap cellMap = new CellMap(particles, actionRadius, readFromFile.getMapSideSize(), false, readFromFile.getMaxRadius());
 
         cellMap.calculateAllNeighbours();
 
